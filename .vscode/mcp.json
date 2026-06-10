@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "influxdb": {
+      "command": "npx",
+      "args": ["influxdb-mcp-server"],
+      "env": {
+        "INFLUXDB_TOKEN": "changeme",
+        "INFLUXDB_URL": "http://localhost:8086",
+        "INFLUXDB_ORG": "smartcity"
+      }
+    }
+  }
+}

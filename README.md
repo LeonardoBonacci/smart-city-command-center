@@ -6,6 +6,9 @@ Built with **InfluxDB 2**, **Grafana**, and **Python** — a full time-series da
 ![Dashboard Preview](docs/dashboard-preview.png)  
 *(Screenshot of the final Grafana dashboard)*
 
+![InfluxDB MCP Integration](docs/influx-mcp.png)  
+*(Querying InfluxDB directly from Copilot via MCP)*
+
 ---
 
 ## What This Is
