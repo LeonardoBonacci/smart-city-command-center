@@ -190,6 +190,245 @@
           "calcs": ["mean", "max"]
         }
       }
+    },
+    {
+      "id": 3,
+      "title": "5-Minute Averages",
+      "description": "Air quality pollutants aggregated into 5-minute windows using aggregateWindow()",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-smartcity"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-smartcity"
+          },
+          "query": "from(bucket: \"sensors\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"air_quality\")\n  |> filter(fn: (r) => r._field == \"pm25\")\n  |> filter(fn: (r) => r.zone =~ /^${zone:regex}$/)\n  |> filter(fn: (r) => r.station =~ /^${station:regex}$/)\n  |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-smartcity"
+          },
+          "query": "from(bucket: \"sensors\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"air_quality\")\n  |> filter(fn: (r) => r._field == \"pm10\")\n  |> filter(fn: (r) => r.zone =~ /^${zone:regex}$/)\n  |> filter(fn: (r) => r.station =~ /^${station:regex}$/)\n  |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-smartcity"
+          },
+          "query": "from(bucket: \"sensors\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"air_quality\")\n  |> filter(fn: (r) => r._field == \"no2\")\n  |> filter(fn: (r) => r.zone =~ /^${zone:regex}$/)\n  |> filter(fn: (r) => r.station =~ /^${station:regex}$/)\n  |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "µg/m³",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "gradientMode": "scheme",
+            "showPoints": "always",
+            "pointSize": 6,
+            "spanNulls": false,
+            "lineInterpolation": "smooth"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byFrameRefID", "options": "A" },
+            "properties": [
+              { "id": "displayName", "value": "PM2.5 (5m avg)" },
+              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byFrameRefID", "options": "B" },
+            "properties": [
+              { "id": "displayName", "value": "PM10 (5m avg)" },
+              { "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byFrameRefID", "options": "C" },
+            "properties": [
+              { "id": "displayName", "value": "NO₂ (5m avg)" },
+              { "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": ["mean", "max", "min"]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Traffic vs Pollution",
+      "description": "Dual-axis chart correlating traffic volume with PM2.5 levels using union()",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-smartcity"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-smartcity"
+          },
+          "query": "from(bucket: \"sensors\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"air_quality\")\n  |> filter(fn: (r) => r._field == \"pm25\")\n  |> filter(fn: (r) => r.zone =~ /^${zone:regex}$/)\n  |> filter(fn: (r) => r.station =~ /^${station:regex}$/)\n  |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-smartcity"
+          },
+          "query": "from(bucket: \"sensors\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"traffic\")\n  |> filter(fn: (r) => r._field == \"vehicles_per_min\")\n  |> filter(fn: (r) => r.zone =~ /^${zone:regex}$/)\n  |> filter(fn: (r) => r.station =~ /^${station:regex}$/)\n  |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "scheme",
+            "showPoints": "auto",
+            "pointSize": 5,
+            "spanNulls": false,
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byFrameRefID", "options": "A" },
+            "properties": [
+              { "id": "displayName", "value": "PM2.5" },
+              { "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } },
+              { "id": "unit", "value": "µg/m³" },
+              { "id": "custom.axisPlacement", "value": "left" },
+              { "id": "custom.axisLabel", "value": "PM2.5 (µg/m³)" }
+            ]
+          },
+          {
+            "matcher": { "id": "byFrameRefID", "options": "B" },
+            "properties": [
+              { "id": "displayName", "value": "Traffic (vehicles/min)" },
+              { "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } },
+              { "id": "unit", "value": "veh/min" },
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "custom.axisLabel", "value": "Vehicles / min" }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": ["mean", "max"]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Zone Comparison",
+      "description": "Bar chart comparing average PM2.5 levels across zones using group(columns: [\"zone\"])",
+      "type": "barchart",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb-smartcity"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb-smartcity"
+          },
+          "query": "from(bucket: \"sensors\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"air_quality\")\n  |> filter(fn: (r) => r._field == \"pm25\" or r._field == \"pm10\" or r._field == \"no2\")\n  |> filter(fn: (r) => r.zone =~ /^${zone:regex}$/)\n  |> group(columns: [\"zone\", \"_field\"])\n  |> mean()\n  |> group()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "µg/m³",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "axisCenteredZero": false,
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "vertical",
+        "barWidth": 0.7,
+        "groupWidth": 0.8,
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "xField": "zone"
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "pm25": "PM2.5",
+              "pm10": "PM10",
+              "no2": "NO₂"
+            }
+          }
+        }
+      ]
     }
   ],
   "schemaVersion": 39,
