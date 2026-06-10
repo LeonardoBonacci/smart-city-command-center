@@ -72,6 +72,21 @@ def get_hour_factor(hour: float) -> float:
     return 1.0 + 1.5 * morning_peak + 1.8 * evening_peak
 
 
+def get_demo_factor(minute: int) -> float:
+    """Demo-friendly rush-minute multiplier on a 5-minute cycle.
+
+    Minutes 0-1: normal traffic
+    Minutes 2-3: morning rush (peak at minute 2.5)
+    Minute 4:    evening rush (peak at minute 4)
+
+    This gives visible spikes every 5 minutes during a short demo.
+    """
+    cycle_pos = minute % 5
+    morning_rush = math.exp(-((cycle_pos - 2.5) ** 2) / 0.5)
+    evening_rush = math.exp(-((cycle_pos - 4.0) ** 2) / 0.5)
+    return 1.0 + 1.5 * morning_rush + 1.8 * evening_rush
+
+
 def get_temperature(hour: float) -> float:
     """Diurnal temperature for Wellington (mild maritime climate, 8-18°C range)."""
     # Min around 5am, max around 2pm
@@ -193,7 +208,7 @@ def main():
         while True:
             now = datetime.now(timezone.utc)
             hour = now.hour + now.minute / 60.0
-            hour_factor = get_hour_factor(hour)
+            hour_factor = get_demo_factor(now.minute)
 
             points = []
             for station in STATIONS:
