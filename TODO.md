@@ -43,15 +43,15 @@
 ### Data Quality Checks
 - [x] Confirm correct tags (station, zone) and fields appear
 - [x] Confirm timestamps are reasonable
-- [ ] Let it run 2-3 minutes to accumulate enough data for dashboards
+- [x] Let it run 2-3 minutes to accumulate enough data for dashboards
 
 ---
 
 ## Phase 3: Grafana Dashboards (The Star of the Show)
 
 ### Dashboard Setup
-- [ ] Create dashboard: "SmartCity Pulse - Urban Monitoring"
-- [ ] Add template variables: `$station` (query), `$zone` (multi-value)
+- [x] Create dashboard: "SmartCity Pulse - Urban Monitoring"
+- [x] Add template variables: `$station` (query), `$zone` (multi-value)
 
 ### Panels to Build
 
@@ -67,7 +67,7 @@
 | 8 | Pollution Spike Alert | Alert list | Grafana alert rule (PM2.5 > 50) |
 
 ### Advanced InfluxDB Features
-- [ ] Create InfluxDB **Task**: hourly downsampling to `sensors_downsampled` bucket
+- [x] Create InfluxDB **Task**: hourly downsampling to `sensors_downsampled` bucket
 - [ ] Add Grafana **annotations** for rush-hour windows
 - [ ] Configure at least one **alert rule** (PM2.5 threshold breach)
 
