@@ -6,8 +6,8 @@
 
 ## Phase 1: Project Scaffolding
 
-- [ ] Create `.gitignore` (Python venv, `__pycache__`, `.env`, IDE files)
-- [ ] Create `.env.example` with placeholder config:
+- [x] Create `.gitignore` (Python venv, `__pycache__`, `.env`, IDE files)
+- [x] Create `.env.example` with placeholder config:
   ```
   INFLUXDB_TOKEN=changeme
   INFLUXDB_ORG=smartcity
@@ -15,16 +15,16 @@
   INFLUXDB_URL=http://localhost:8086
   GRAFANA_ADMIN_PASSWORD=admin
   ```
-- [ ] Create `requirements.txt` (`influxdb-client`, `python-dotenv`)
-- [ ] Create `config.py` (reads `.env`, exports settings)
+- [x] Create `requirements.txt` (`influxdb-client`, `python-dotenv`)
+- [x] Create `config.py` (reads `.env`, exports settings)
 
 ### Docker Environment
-- [ ] Create `docker-compose.yml`:
+- [x] Create `docker-compose.yml`:
   - InfluxDB 2 (port 8086, auto-setup with env vars)
   - Grafana (port 3000, provisioning volume mounts)
-- [ ] Create `provisioning/datasources/influxdb.yml` (auto-configures Grafana → InfluxDB)
-- [ ] Create `provisioning/dashboards/dashboard.yml` (points to JSON dashboard file)
-- [ ] `docker compose up -d` — verify:
+- [x] Create `provisioning/datasources/influxdb.yml` (auto-configures Grafana → InfluxDB)
+- [x] Create `provisioning/dashboards/dashboard.yml` (points to JSON dashboard file)
+- [x] `docker compose up -d` — verify:
   - InfluxDB at http://localhost:8086
   - Grafana at http://localhost:3000 (datasource pre-configured)
 
@@ -32,17 +32,17 @@
 
 ## Phase 2: Data Ingestion
 
-- [ ] Create `ingest_smartcity.py`:
+- [x] Create `ingest_smartcity.py`:
   - 10 sensor stations across 4 zones (center, industrial, residential, park)
   - Measurements: `air_quality`, `traffic`, `weather`
   - Realistic patterns: rush-hour spikes (7-9am, 5-7pm), diurnal temperature, zone-based baselines
   - Writes batches every 10 seconds
-- [ ] Run ingestion: `python ingest_smartcity.py`
-- [ ] Verify data in InfluxDB Data Explorer
+- [x] Run ingestion: `python ingest_smartcity.py`
+- [x] Verify data in InfluxDB Data Explorer
 
 ### Data Quality Checks
-- [ ] Confirm correct tags (station, zone) and fields appear
-- [ ] Confirm timestamps are reasonable
+- [x] Confirm correct tags (station, zone) and fields appear
+- [x] Confirm timestamps are reasonable
 - [ ] Let it run 2-3 minutes to accumulate enough data for dashboards
 
 ---
