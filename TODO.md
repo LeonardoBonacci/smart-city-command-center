@@ -88,11 +88,11 @@
 
 ## Phase 4: Polish & Export
 
-- [ ] Export final dashboard as JSON → `provisioning/dashboards/smartcity-pulse.json`
-- [ ] Verify full cycle: `docker compose down -v && docker compose up -d` → dashboards appear
-- [ ] Take screenshots → `docs/dashboard-preview.png`
-- [ ] Update README with actual screenshot
-- [ ] Add auto-refresh (10s) and time range (Last 30 minutes) as dashboard defaults
+- [x] Export final dashboard as JSON → `provisioning/dashboards/smartcity-pulse.json`
+- [x] Verify full cycle: `docker compose down -v && docker compose up -d` → dashboards appear
+- [x] Take screenshots → `docs/dashboard-preview.png`
+- [x] Update README with actual screenshot
+- [x] Add auto-refresh (10s) and time range (Last 30 minutes) as dashboard defaults
 - [ ] Final commit with clean history
 
 ---
