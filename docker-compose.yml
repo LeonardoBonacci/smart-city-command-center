@@ -23,6 +23,7 @@ services:
     volumes:
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./provisioning/alerting:/etc/grafana/provisioning/alerting
       - grafana-data:/var/lib/grafana
     depends_on:
       - influxdb

@@ -1,0 +1,97 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: default-email
+    receivers:
+      - uid: default-email
+        type: email
+        settings:
+          addresses: admin@smartcity.local
+        disableResolveMessage: false
+
+policies:
+  - orgId: 1
+    receiver: default-email
+    group_by: ['grafana_folder', 'alertname']
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 4h
+
+groups:
+  - orgId: 1
+    name: air_quality_alerts
+    folder: SmartCity Alerts
+    interval: 1m
+    rules:
+      - uid: pm25-threshold-breach
+        title: "PM2.5 Threshold Breach"
+        condition: threshold
+        for: 2m
+        annotations:
+          summary: "PM2.5 has exceeded 50 µg/m³ — unhealthy for sensitive groups"
+          description: "Station {{ $labels.station }} in zone {{ $labels.zone }} is reporting PM2.5 = {{ $values.A }} µg/m³"
+        labels:
+          severity: warning
+          category: air_quality
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: influxdb-smartcity
+            model:
+              refId: A
+              datasource:
+                type: influxdb
+                uid: influxdb-smartcity
+              query: |
+                from(bucket: "sensors")
+                  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+                  |> filter(fn: (r) => r._measurement == "air_quality")
+                  |> filter(fn: (r) => r._field == "pm25")
+                  |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)
+              intervalMs: 60000
+              maxDataPoints: 43200
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              datasource:
+                type: __expr__
+                uid: __expr__
+              reducer: last
+              settings:
+                mode: ""
+          - refId: threshold
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: __expr__
+            model:
+              refId: threshold
+              type: threshold
+              expression: B
+              datasource:
+                type: __expr__
+                uid: __expr__
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 50
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - threshold
+                  reducer:
+                    type: last
+                  type: query
+        noDataState: NoData
+        execErrState: Error

@@ -69,7 +69,7 @@
 ### Advanced InfluxDB Features
 - [x] Create InfluxDB **Task**: hourly downsampling to `sensors_downsampled` bucket
 - [x] Add Grafana **annotations** for rush-hour windows
-- [ ] Configure at least one **alert rule** (PM2.5 threshold breach)
+- [x] Configure at least one **alert rule** (PM2.5 threshold breach)
 
 ### Flux Queries to Implement (Copilot-assisted)
 - [ ] Custom AQI calculation using `map()`:
